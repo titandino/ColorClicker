@@ -11,7 +11,7 @@ public class Menaphites extends Script {
 	public void process() {
 		try {
 			Bot.MOUSE_SPEED = 4;
-			Bot.moveMouse(new Color(140, 110, 251), 5, 15);
+			Bot.moveMouse(new Color(100, 70, 251), 5, 20);
 			Bot.click();
 			if (Bot.getHealthPercent() < 20) {
 				Bot.pressKey('R');
