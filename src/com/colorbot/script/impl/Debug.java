@@ -9,7 +9,7 @@ public class Debug extends Script {
 	public void process() {
 		try {
 			BotFrame.log("Color you are hovering: " + Bot.getColorOnMouse().toString());
-			BotFrame.log("Health distance: " + Bot.getHP());
+			BotFrame.log("Health distance: " + Bot.getHealthPercent());
 			Thread.sleep(500);
 		} catch (InterruptedException e) {
 			

@@ -41,8 +41,7 @@ public class Bot {
 		BufferedImage screen = captureScreen();
 		int[] region = findSubimage(screen, hp);
 		if (region[0] != 0 && region[1] != 0) {
-			healthLocation = new Rectangle(region[0]+8, region[1]-11, 65, 10);
-			ImageIO.write(robot.createScreenCapture(healthLocation), "png", new File("meme.png"));
+			healthLocation = new Rectangle(region[0]+10, region[1]+9, 89, 8);
 			BotFrame.log("Found health location at: " + Arrays.toString(region));
 		}
 	}
@@ -106,6 +105,25 @@ public class Bot {
 		return getLongestConsecutiveColorX(captureScreen(), color, distance);
 	}
 	
+	public static int getLCCRed(BufferedImage image, int r) {
+		int[] pixel;
+		int consecutive = 0;
+		boolean found = false;
+		for (int y = 0;y < image.getHeight();y++) {
+			for (int x = 0;x < image.getWidth();x++) {
+				pixel = image.getRaster().getPixel(x, y, new int[3]);
+				if (pixel[0] > r) {
+					found = true;
+					consecutive++;
+				} else {
+					if (found)
+						break;
+				}
+			}
+		}
+		return consecutive;
+	}
+	
 	public static int getLongestConsecutiveColorX(BufferedImage image, Color color, double distance) {
 		int[] pixel;
 		int consecutive = 0;
@@ -125,16 +143,17 @@ public class Bot {
 		return consecutive;
 	}
 
-	public static int getHP() {
+	public static double getHealthPercent() {
 		if (healthLocation != null) {
 			try {
 				BufferedImage hpImage = robot.createScreenCapture(healthLocation);
-				return getLongestConsecutiveColorX(hpImage, new Color(60, 180, 0), 30);
+				int curr = getLCCRed(hpImage, 200);
+				return (curr*100)/79.0;
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		return HP;
+		return 100.0;
 	}
 	
 	private static double getDifference(Color c1, Color c2) {

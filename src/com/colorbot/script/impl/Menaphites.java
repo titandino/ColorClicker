@@ -13,10 +13,10 @@ public class Menaphites extends Script {
 			Bot.MOUSE_SPEED = 4;
 			Bot.moveMouse(new Color(140, 110, 251), 5, 15);
 			Bot.click();
-			if (Bot.getHP() < 500) {
+			if (Bot.getHealthPercent() < 20) {
 				Bot.pressKey('R');
 			}
-			Thread.sleep(Bot.random(400, 1000));
+			Thread.sleep(Bot.random(400, 900));
 		} catch(Exception e) {
 			
 		}
