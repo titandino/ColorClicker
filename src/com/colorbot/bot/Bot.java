@@ -8,7 +8,12 @@ import java.awt.Robot;
 import java.awt.Toolkit;
 import java.awt.event.InputEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
+
+import javax.imageio.ImageIO;
 
 import com.colorbot.script.Script;
 import com.colorbot.script.impl.*;
@@ -24,11 +29,61 @@ public class Bot {
 	public static Script currentScript;
 	public static int MOUSE_SPEED = 5;
 	
-	public static int HP = 100;
+	private static Rectangle healthLocation;
+	
+	public static int HP = 9900;
 	
 	public static int SCREEN_WIDTH = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
 	public static int SCREEN_HEIGHT = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
+		
+	public static void locateHealth() throws IOException {
+		BufferedImage hp = ImageIO.read(new File("img/hp.png"));
+		BufferedImage screen = captureScreen();
+		int[] region = findSubimage(screen, hp);
+		if (region[0] != 0 && region[1] != 0) {
+			healthLocation = new Rectangle(region[0]+8, region[1]-11, 65, 10);
+			ImageIO.write(robot.createScreenCapture(healthLocation), "png", new File("meme.png"));
+			BotFrame.log("Found health location at: " + Arrays.toString(region));
+		}
+	}
+
+	public static void init() throws IOException {
+		locateHealth();
+	}
 	
+	public static int[] findSubimage(BufferedImage im1, BufferedImage im2) {
+		int w1 = im1.getWidth();
+		int h1 = im1.getHeight();
+		int w2 = im2.getWidth();
+		int h2 = im2.getHeight();
+		assert (w2 <= w1 && h2 <= h1);
+		int bestX = 0;
+		int bestY = 0;
+		double lowestDiff = Double.POSITIVE_INFINITY;
+		for (int x = 0; x < w1 - w2; x++) {
+			for (int y = 0; y < h1 - h2; y++) {
+				double comp = compareImages(im1.getSubimage(x, y, w2, h2), im2);
+				if (comp < lowestDiff) {
+					bestX = x;
+					bestY = y;
+					lowestDiff = comp;
+				}
+			}
+		}
+		return new int[] { bestX, bestY };
+	}
+
+	public static double compareImages(BufferedImage im1, BufferedImage im2) {
+		assert (im1.getHeight() == im2.getHeight() && im1.getWidth() == im2.getWidth());
+		double variation = 0.0;
+		for (int x = 0; x < im1.getWidth(); x++) {
+			for (int y = 0; y < im1.getHeight(); y++) {
+				variation += getDifference(im1.getRGB(x, y), im2.getRGB(x, y)) / Math.sqrt(3);
+			}
+		}
+		return variation / (im1.getWidth() * im1.getHeight());
+	}
+
 	public static Color getColorOnMouse() {
 		return robot.getPixelColor((int) MouseInfo.getPointerInfo().getLocation().getX(), (int) MouseInfo.getPointerInfo().getLocation().getY());
 	}
@@ -48,10 +103,13 @@ public class Bot {
 	}
 	
 	public static int getLongestConsecutiveColorX(Color color, double distance) {
+		return getLongestConsecutiveColorX(captureScreen(), color, distance);
+	}
+	
+	public static int getLongestConsecutiveColorX(BufferedImage image, Color color, double distance) {
 		int[] pixel;
 		int consecutive = 0;
 		boolean found = false;
-		BufferedImage image = captureScreen();
 		for (int y = 0;y < image.getHeight();y++) {
 			for (int x = 0;x < image.getWidth();x++) {
 				pixel = image.getRaster().getPixel(x, y, new int[3]);
@@ -66,24 +124,39 @@ public class Bot {
 		}
 		return consecutive;
 	}
-	
-	public static int getHealthPercent() {
-		int longest = getLongestConsecutiveColorX(new Color(75, 190, 0), 30);
-		if (longest >= 0 && longest <= 40)
-			HP = longest;
+
+	public static int getHP() {
+		if (healthLocation != null) {
+			try {
+				BufferedImage hpImage = robot.createScreenCapture(healthLocation);
+				return getLongestConsecutiveColorX(hpImage, new Color(60, 180, 0), 30);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		return HP;
 	}
 	
 	private static double getDifference(Color c1, Color c2) {
 		return Math.sqrt(Math.pow(c2.getRed() - c1.getRed(), 2) + Math.pow(c2.getGreen() - c1.getGreen(), 2) + Math.pow(c2.getBlue() - c1.getBlue(), 2));
 	}
+
+	public static double getDifference(int rgb1, int rgb2) {
+		double r1 = ((rgb1 >> 16) & 0xFF) / 255.0;
+		double r2 = ((rgb2 >> 16) & 0xFF) / 255.0;
+		double g1 = ((rgb1 >> 8) & 0xFF) / 255.0;
+		double g2 = ((rgb2 >> 8) & 0xFF) / 255.0;
+		double b1 = (rgb1 & 0xFF) / 255.0;
+		double b2 = (rgb2 & 0xFF) / 255.0;
+		return Math.sqrt((r1 - r2) * (r1 - r2) + (g1 - g2) * (g1 - g2) + (b1 - b2) * (b1 - b2));
+	}
 	
     private static BufferedImage captureScreen() {
         final Rectangle rectangle = new Rectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         return robot.createScreenCapture(rectangle);
     }
-	
-	public static void moveMouse(Color color, double distance, int dontMoveDist) {
+    
+    public static void moveMouse(Color color, double distance, int dontMoveDist) {
 		Point moveTo = getPointWithColor(color, distance);
 		if (moveTo != null) {
 			if (Mouse.getMouseLocation().distance(new Point(moveTo)) > dontMoveDist)
@@ -139,5 +212,4 @@ public class Bot {
 			
 		}
 	}
-
 }

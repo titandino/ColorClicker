@@ -6,6 +6,7 @@ import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import org.jnativehook.GlobalScreen;
+
 import com.colorbot.bot.Bot;
 import com.colorbot.window.BotFrame;
 
@@ -15,7 +16,6 @@ public class Main {
     	LogManager.getLogManager().reset();
     	Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
     	logger.setLevel(Level.OFF);
-    	
     	GlobalScreen.registerNativeHook();
 		Bot.robot = new Robot(GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice());	
 		GlobalScreen.addNativeKeyListener(new NativeKeyHandler());
@@ -25,6 +25,7 @@ public class Main {
 					BotFrame frame = new BotFrame();
 					frame.setVisible(true);
 					BotFrame.log("Ready to go. Select a script.");
+					Bot.init();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
