@@ -14,7 +14,7 @@ public class Mouse {
 	public static final int DEFAULT_MAX_MOVE_AFTER = 0;
 	public static final int msPerBit = 105;
 	public static final int reactionTime = 0;
-
+	
 	private final static Random random = new java.util.Random();
 	
 	public static Point getMouseLocation() {
@@ -42,7 +42,7 @@ public class Mouse {
 		}
 	}
 
-	public static Point[] applyDynamism(final Point[] spline, final int msForMove, final int msPerMove) {
+	private static Point[] applyDynamism(final Point[] spline, final int msForMove, final int msPerMove) {
 		final int numPoints = spline.length;
 		final double msPerPoint = (double) msForMove / (double) numPoints;
 		final double undistStep = msPerMove / msPerPoint;
@@ -77,7 +77,7 @@ public class Mouse {
 		return result;
 	}
 
-	public static long fittsLaw(final double targetDist, final double targetSize) {
+	private static long fittsLaw(final double targetDist, final double targetSize) {
 		return (long) (Mouse.reactionTime + Mouse.msPerBit * Math.log10(targetDist / targetSize + 1) / Math.log10(2));
 	}
 
@@ -99,7 +99,7 @@ public class Mouse {
 		return table;
 	}
 
-	public static Point[] generateControls(final int sx, final int sy, final int ex, final int ey, int ctrlSpacing, int ctrlVariance) {
+	private static Point[] generateControls(final int sx, final int sy, final int ex, final int ey, int ctrlSpacing, int ctrlVariance) {
 		final double dist = Math.sqrt((sx - ex) * (sx - ex) + (sy - ey) * (sy - ey));
 		final double angle = Math.atan2(ey - sy, ex - sx);
 		int ctrlPoints = (int) Math.floor(dist / ctrlSpacing);
@@ -126,7 +126,7 @@ public class Mouse {
 		return result;
 	}
 
-	public static Point[] generateSpline(final Point[] controls) {
+	private static Point[] generateSpline(final Point[] controls) {
 		final double degree = controls.length - 1;
 		final java.util.Vector<Point> spline = new java.util.Vector<Point>();
 		boolean lastFlag = false;
@@ -154,8 +154,16 @@ public class Mouse {
 		Mouse.adaptiveMidpoints(spline);
 		return spline.toArray(new Point[spline.size()]);
 	}
+	
+	public static void moveMouse(int x, int y) {
+		moveMouse(x, y, 0);
+	}
 
-	public void moveMouse(final int speed, final int x1, final int y1, final int x2, final int y2, int randX, int randY) {
+	public static void moveMouse(int x, int y, int rand) {
+		moveMouse(Bot.MOUSE_SPEED, getMouseLocation().x, getMouseLocation().y, x, y, rand, rand);
+	}
+
+	public static void moveMouse(final int speed, final int x1, final int y1, final int x2, final int y2, int randX, int randY) {
 		if ((x2 == -1) && (y2 == -1)) {
 			return;
 		}
