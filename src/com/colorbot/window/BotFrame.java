@@ -25,6 +25,7 @@ public class BotFrame extends JFrame {
 	
 	public static JPanel contentPane;
 	public static JTextArea log = new JTextArea();
+	public static JComboBox<Script> scripts;
 
 	public BotFrame() {
 		setTitle("Trent's Shitty Color Bot");
@@ -37,11 +38,11 @@ public class BotFrame extends JFrame {
 		JLabel currentScriptLabel = new JLabel("Script:");
 		contentPane.add(currentScriptLabel);
 		
-	    final JComboBox<Script> scripts = new JComboBox<Script>(Bot.SCRIPT_LIST);
+	    scripts = new JComboBox<Script>(Bot.SCRIPT_LIST);
 	    scripts.setVisible(true);
 	    contentPane.add(scripts);
 		
-		JButton stopButton = new JButton("Stop Script (Esc)");
+		JButton stopButton = new JButton("Stop Script (F10)");
 		stopButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -51,7 +52,7 @@ public class BotFrame extends JFrame {
 		
 		contentPane.add(stopButton);
 		
-		JButton startButton = new JButton("Start Script");
+		JButton startButton = new JButton("Start Script (F9)");
 		contentPane.add(startButton);
 		startButton.addActionListener(new ActionListener() {
 			@Override

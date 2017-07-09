@@ -1,8 +1,7 @@
 package com.colorbot.script.impl;
 
-import java.awt.Color;
-
 import com.colorbot.bot.Bot;
+import com.colorbot.bot.Mouse;
 import com.colorbot.script.Script;
 
 public class PowerFishing extends Script {
@@ -11,9 +10,8 @@ public class PowerFishing extends Script {
 	public void process() {
 		try {
 			Bot.MOUSE_SPEED = 4;
-			Bot.moveMouse(new Color(140, 110, 251), 5, 15);
-			Bot.click();
-			Thread.sleep(Bot.random(400, 1000));
+			Mouse.moveMouse(Bot.random(0, 500), Bot.random(0, 500));
+			Thread.sleep(5000);
 		} catch(Exception e) {
 			
 		}
