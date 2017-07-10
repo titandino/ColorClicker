@@ -11,6 +11,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
@@ -209,8 +210,12 @@ public class Bot {
 		currentScript = null;
 	}
 	
+	public static Random random = new Random();
+	
 	public static final int random(int maxValue) {
-		return (int) (Math.random() * (maxValue + 1));
+		if (maxValue <= 0)
+			return 0;
+		return random.nextInt(maxValue);
 	}
 
 	public static final int random(int min, int max) {
