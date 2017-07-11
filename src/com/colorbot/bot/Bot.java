@@ -11,6 +11,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
@@ -198,6 +199,14 @@ public class Bot {
         return robot.createScreenCapture(rectangle);
     }
     
+    public static void moveMouse(Color color, double distance, int dontMoveDist, int random) {
+		Point moveTo = getPointWithColor(color, distance);
+		if (moveTo != null) {
+			if (Mouse.getMouseLocation().distance(new Point(moveTo)) > dontMoveDist)
+				Mouse.moveMouse(moveTo.x, moveTo.y, random);
+		}
+	}
+    
     public static void moveMouse(Color color, double distance, int dontMoveDist) {
 		Point moveTo = getPointWithColor(color, distance);
 		if (moveTo != null) {
@@ -224,8 +233,12 @@ public class Bot {
 		currentScript = null;
 	}
 	
+	public static Random random = new Random();
+	
 	public static final int random(int maxValue) {
-		return (int) (Math.random() * (maxValue + 1));
+		if (maxValue <= 0)
+			return 0;
+		return random.nextInt(maxValue);
 	}
 
 	public static final int random(int min, int max) {
