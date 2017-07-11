@@ -20,10 +20,11 @@ import com.colorbot.script.Script;
 import com.colorbot.script.impl.*;
 import com.colorbot.task.TaskExecutor;
 import com.colorbot.window.BotFrame;
+import com.colorbot.window.Overlay;
 
 public class Bot {
 	
-	public static final Script[] SCRIPT_LIST = new Script[] { new Debug(), new Menaphites(), new PowerFishing() };
+	public static final Script[] SCRIPT_LIST = new Script[] { new Debug(), new Menaphites(), new RuneSpan() };
 
 	public static Robot robot;
 	
@@ -44,6 +45,11 @@ public class Bot {
 		if (region[0] != 0 && region[1] != 0) {
 			healthLocation = new Rectangle(region[0]+10, region[1]+9, 89, 8);
 			BotFrame.log("Found health location at: " + Arrays.toString(region));
+			System.out.println("Health: " + OCR.getTextAt(new Rectangle((int) healthLocation.getX(), (int) healthLocation.getY(), (int) healthLocation.getWidth()-70, (int) healthLocation.getHeight()-23)));
+			Overlay.drawRect(new Rectangle((int) healthLocation.getX(), (int) healthLocation.getY(), (int) healthLocation.getWidth()-70, (int) healthLocation.getHeight()-23));
+			Rectangle xpTest = new Rectangle(33, 48, 30, 15);
+			System.out.println(OCR.getTextAt(xpTest));
+			Overlay.drawRect(xpTest);
 		}
 	}
 
@@ -194,7 +200,7 @@ public class Bot {
 		return Math.sqrt((r1 - r2) * (r1 - r2) + (g1 - g2) * (g1 - g2) + (b1 - b2) * (b1 - b2));
 	}
 	
-    private static BufferedImage captureScreen() {
+    public static BufferedImage captureScreen() {
         final Rectangle rectangle = new Rectangle(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
         return robot.createScreenCapture(rectangle);
     }
@@ -279,5 +285,10 @@ public class Bot {
 		} catch(Exception e) {
 			
 		}
+	}
+
+	public static Color getColorAt(BufferedImage i, int x, int y) {
+		int[] pixel = i.getRaster().getPixel(x, y, new int[3]);
+		return new Color(pixel[0], pixel[1], pixel[2]);
 	}
 }

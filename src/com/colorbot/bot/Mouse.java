@@ -181,6 +181,7 @@ public class Mouse {
 			final Point[] spline = Mouse.generateSpline(controls);
 			final long timeToMove = Mouse.fittsLaw(Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)), 10);
 			final Point[] path = Mouse.applyDynamism(spline, (int) timeToMove, Mouse.DEFAULT_MOUSE_SPEED);
+			//final Point[] path = spline;
 			for (final Point aPath : path) {
 				Bot.robot.mouseMove(aPath.x, aPath.y);
 				try {

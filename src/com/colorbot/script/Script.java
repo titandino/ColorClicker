@@ -1,5 +1,9 @@
 package com.colorbot.script;
 
+import java.awt.Graphics;
+
+import com.colorbot.window.Overlay;
+
 public abstract class Script implements Runnable {
 	
 	public String[] args;
@@ -7,8 +11,11 @@ public abstract class Script implements Runnable {
 	
 	@Override
 	public void run() {
-		if (running)
+		if (running) {
+			paint(Overlay.ovl.getGraphics());
+			Overlay.ovl.repaint();
 			process();
+		}
 	}
 	
 	public void stop() {
@@ -17,6 +24,10 @@ public abstract class Script implements Runnable {
 	
 	public void start() {
 		running = true;
+	}
+	
+	public void paint(Graphics g) {
+		
 	}
 	
 	public abstract void process();
