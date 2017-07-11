@@ -101,6 +101,29 @@ public class Bot {
 		return null;
 	}
 	
+	public static Point getPointWithColorCombo(Color color1, Color color2, int radius, double colorVariation) {
+		int[] pixel;
+		BufferedImage image = captureScreen();
+		for (int x = 0;x < image.getWidth();x++) {
+			for (int y = 0;y < image.getHeight();y++) {
+				pixel = image.getRaster().getPixel(x, y, new int[3]);
+				if (getDifference(color1, new Color(pixel[0], pixel[1], pixel[2])) <= colorVariation) {
+					for(int xOff = x-radius;xOff < x+radius;xOff++) {
+						for(int yOff = y-radius;yOff < y+radius;yOff++) {
+							if ((xOff < 0 || xOff >= image.getWidth()) || (yOff < 0 || yOff >= image.getHeight()))
+								continue;
+							pixel = image.getRaster().getPixel(xOff, yOff, new int[3]);
+							if (getDifference(color2, new Color(pixel[0], pixel[1], pixel[2])) <= colorVariation) {
+								return new Point(x, y);
+							}
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}
+	
 	public static int getLongestConsecutiveColorX(Color color, double distance) {
 		return getLongestConsecutiveColorX(captureScreen(), color, distance);
 	}
