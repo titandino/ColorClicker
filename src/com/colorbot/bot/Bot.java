@@ -211,6 +211,14 @@ public class Bot {
     	if (Mouse.getMouseLocation().distance(p) > dontMoveDist)
 			Mouse.moveMouse(p.x, p.y, random);
     }
+
+    public static void moveMouse(Color color, Color color2, int radius, double colorVariation, int dontMoveDist, int random) {
+		Point moveTo = getPointWithColorCombo(color, color2, radius, colorVariation);
+		if (moveTo != null) {
+			if (Mouse.getMouseLocation().distance(new Point(moveTo)) > dontMoveDist)
+				Mouse.moveMouse(moveTo.x, moveTo.y, random);
+		}
+	}
     
     public static void moveMouse(Color color, double distance, int dontMoveDist) {
 		Point moveTo = getPointWithColor(color, distance);
