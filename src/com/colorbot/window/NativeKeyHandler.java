@@ -1,11 +1,10 @@
-package com.colorbot;
+package com.colorbot.window;
 
 import org.jnativehook.keyboard.NativeKeyEvent;
 import org.jnativehook.keyboard.NativeKeyListener;
 
 import com.colorbot.bot.Bot;
 import com.colorbot.script.Script;
-import com.colorbot.window.BotFrame;
 
 public class NativeKeyHandler implements NativeKeyListener {
 	@Override
@@ -23,11 +22,11 @@ public class NativeKeyHandler implements NativeKeyListener {
 
 	@Override
 	public void nativeKeyTyped(NativeKeyEvent arg0) {
-		
+
 	}
 
 	@Override
 	public void nativeKeyReleased(NativeKeyEvent arg0) {
-		
+
 	}
 }

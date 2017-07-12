@@ -1,6 +1,10 @@
 package com.colorbot.bot;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.font.FontRenderContext;
 import java.awt.font.TextLayout;
 import java.awt.geom.Rectangle2D;
@@ -59,7 +63,7 @@ public class RSText {
 	 */
 	public static class AllFonts {
 		public static String[] FONT_NAMES = { "BigChars", "CharsNPC", "FriendChars", "LoginChars", "SmallChars", "StatChars", "UpChars", "UpCharsEx", "XPChars", "SmallCharsNS" };
-		//public static String[] FONT_NAMES = { "XPChars" };
+		// public static String[] FONT_NAMES = { "XPChars" };
 		public static final Font[][] ALL_LETTERS = new Font[FONT_NAMES.length][127];
 
 		public AllFonts() {
@@ -90,7 +94,7 @@ public class RSText {
 				fontset[cnt++] = grabPoints(img, (char) i);
 			}
 		} catch (IOException ignored) {
-			
+
 		}
 		return fontset;
 	}

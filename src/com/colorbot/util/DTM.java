@@ -2,13 +2,12 @@ package com.colorbot.util;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import com.colorbot.bot.Bot;
-import com.colorbot.window.BotFrame;
+import com.colorbot.window.Point;
 
 /**
  * 
@@ -208,21 +207,6 @@ public class DTM {
 			g.fill3DRect(dtm.x + dtm.width - 33, dtm.y + dtm.height + 4, 41, 11, true);
 			g.setColor(Color.WHITE);
 			g.drawString(name + " " + i, dtm.x + dtm.width - 30, dtm.y + dtm.height + 13);
-		}
-	}
-
-	public void fancydraw(Graphics g, Color recColor, boolean addname, boolean addX) {
-		try {
-			if (dtmLocations.isEmpty())
-				return;
-			g.setFont(g.getFont().deriveFont((float) 9));
-			for (Rectangle dtmLocation : dtmLocations) {
-				drawDTMSquares(g, recColor, addname);
-			}
-			if (addX)
-				drawX(g, dtmLocations.get(0));
-		} catch (Exception e) {
-			BotFrame.log("Exception occured in paint");
 		}
 	}
 }

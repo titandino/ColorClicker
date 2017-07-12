@@ -17,7 +17,7 @@ public class ColorPattern {
 	private final List<ColorPoint> points = new LinkedList<ColorPoint>();
 
 	public ColorPattern(final ColorPoint[] points) {
-        Collections.addAll(this.points, points);
+		Collections.addAll(this.points, points);
 	}
 
 	public ColorPattern() {
@@ -26,8 +26,7 @@ public class ColorPattern {
 
 	public boolean isPresent(final BufferedImage image) {
 		for (final ColorPoint cp : points) {
-			if (image.getRGB(cp.getPoint().x, cp.getPoint().y) != cp.getColor()
-					.getRGB()) {
+			if (image.getRGB(cp.getPoint().x, cp.getPoint().y) != cp.getColor().getRGB()) {
 				return false;
 			}
 		}
@@ -41,20 +40,20 @@ public class ColorPattern {
 		boolean[] matches = new boolean[points.size()];
 		for (int x = 0; x < image.getWidth(); x++) {
 			for (int y = 0; y < image.getHeight(); y++) {
-                for (final ColorPoint cp : points) {
-                    if (cp.getColor().equals(ImageUtil.getColorAt(image, x, y))) {
-                        if (trueCount == 0) {
-                            final Point p = cp.getPoint();
-                            xc = p.x;
-                            yc = p.y;
-                        }
-                        matches[trueCount++] = true;
-                        break;
-                    } else {
-                        trueCount = 0;
-                        Arrays.fill(matches, false);
-                    }
-                }
+				for (final ColorPoint cp : points) {
+					if (cp.getColor().equals(ImageUtil.getColorAt(image, x, y))) {
+						if (trueCount == 0) {
+							final Point p = cp.getPoint();
+							xc = p.x;
+							yc = p.y;
+						}
+						matches[trueCount++] = true;
+						break;
+					} else {
+						trueCount = 0;
+						Arrays.fill(matches, false);
+					}
+				}
 			}
 		}
 		return new Point(xc, yc);

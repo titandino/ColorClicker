@@ -14,8 +14,7 @@ import java.util.List;
  * @Author Unknown. Converted from Simba
  */
 public class ImageUtil {
-	public static BufferedImage rotate(final BufferedImage source,
-			final int angle) {
+	public static BufferedImage rotate(final BufferedImage source, final int angle) {
 		final int w = source.getWidth();
 		final int h = source.getHeight();
 		final BufferedImage image = new BufferedImage(w, h, source.getType());
@@ -25,19 +24,15 @@ public class ImageUtil {
 		return image;
 	}
 
-	public static List<Point> findMatchLocations(final BufferedImage large,
-			final BufferedImage small, final double threshold) {
+	public static List<Point> findMatchLocations(final BufferedImage large, final BufferedImage small, final double threshold) {
 		return findMatchLocations(large, small, threshold, false);
 	}
 
-	public static List<Point> findMatchLocations(final BufferedImage large,
-			final BufferedImage small) {
+	public static List<Point> findMatchLocations(final BufferedImage large, final BufferedImage small) {
 		return findMatchLocations(large, small, 0.0);
 	}
 
-	private static List<Point> findMatchLocations(final BufferedImage large,
-			final BufferedImage small, final double threshold,
-			final boolean breakAfterFirst) {
+	private static List<Point> findMatchLocations(final BufferedImage large, final BufferedImage small, final double threshold, final boolean breakAfterFirst) {
 		final List<Point> locs = new LinkedList<Point>();
 		for (int y = 0; y < large.getHeight() - small.getHeight(); y++) {
 			for (int x = 0; x < large.getWidth() - small.getWidth(); x++) {
@@ -52,14 +47,12 @@ public class ImageUtil {
 		return locs;
 	}
 
-	private static double imageDistance(final BufferedImage large,
-			final int bx, final int by, final BufferedImage small) {
+	private static double imageDistance(final BufferedImage large, final int bx, final int by, final BufferedImage small) {
 		float dist = 0.0F;
 		for (int y = 0; y < small.getHeight(); y++) {
 			for (int x = 0; x < small.getWidth(); x++) {
 				for (int colorChannel = 0; colorChannel < 3; colorChannel++) {
-					dist += Math
-							.pow(small.getRGB(x, y) - large.getRGB(x, y), 2);
+					dist += Math.pow(small.getRGB(x, y) - large.getRGB(x, y), 2);
 				}
 			}
 		}
@@ -79,8 +72,7 @@ public class ImageUtil {
 	 * @return <tt>true</tt> if the large image contains the small image;
 	 *         otherwise <tt>false</tt>.
 	 */
-	public static boolean imageContains(final BufferedImage large,
-			final BufferedImage small, final double threshold) {
+	public static boolean imageContains(final BufferedImage large, final BufferedImage small, final double threshold) {
 		return findMatchLocations(large, small, threshold, true).size() > 0;
 	}
 
@@ -95,8 +87,7 @@ public class ImageUtil {
 	 * @return <tt>true</tt> if the large image contains the small image;
 	 *         otherwise <tt>false</tt>.
 	 */
-	public static boolean imageContains(final BufferedImage large,
-			final BufferedImage small) {
+	public static boolean imageContains(final BufferedImage large, final BufferedImage small) {
 		return imageContains(large, small, 0.0);
 	}
 
@@ -121,11 +112,8 @@ public class ImageUtil {
 	 * @return <tt>true</tt> if the sub image of the large image contains the
 	 *         small image; otherwise <tt>false</tt>.
 	 */
-	public static boolean subImageContains(final BufferedImage large,
-			final int x, final int y, final int width, final int height,
-			final BufferedImage small, final double threshold) {
-		return imageContains(large.getSubimage(x, y, width, height), small,
-				threshold);
+	public static boolean subImageContains(final BufferedImage large, final int x, final int y, final int width, final int height, final BufferedImage small, final double threshold) {
+		return imageContains(large.getSubimage(x, y, width, height), small, threshold);
 	}
 
 	/**
@@ -147,9 +135,7 @@ public class ImageUtil {
 	 * @return <tt>true</tt> if the sub image of the large image contains the
 	 *         small image; otherwise <tt>false</tt>.
 	 */
-	public static boolean subImageContains(final BufferedImage large,
-			final int x, final int y, final int width, final int height,
-			final BufferedImage small) {
+	public static boolean subImageContains(final BufferedImage large, final int x, final int y, final int width, final int height, final BufferedImage small) {
 		return subImageContains(large, x, y, width, height, small, 0.0);
 	}
 
@@ -168,11 +154,8 @@ public class ImageUtil {
 	 * @return <tt>true</tt> if the sub image of the large image contains the
 	 *         small image; otherwise <tt>false</tt>.
 	 */
-	public static boolean subImageContains(final BufferedImage large,
-			final Rectangle sub, final BufferedImage small,
-			final double threshold) {
-		return subImageContains(large, sub.x, sub.y, sub.width, sub.height,
-				small, threshold);
+	public static boolean subImageContains(final BufferedImage large, final Rectangle sub, final BufferedImage small, final double threshold) {
+		return subImageContains(large, sub.x, sub.y, sub.width, sub.height, small, threshold);
 	}
 
 	/**
@@ -188,8 +171,7 @@ public class ImageUtil {
 	 * @return <tt>true</tt> if the sub image of the large image contains the
 	 *         small image; otherwise <tt>false</tt>.
 	 */
-	public static boolean subImageContains(final BufferedImage large,
-			final Rectangle sub, final BufferedImage small) {
+	public static boolean subImageContains(final BufferedImage large, final Rectangle sub, final BufferedImage small) {
 		return subImageContains(large, sub, small, 0.0);
 	}
 
@@ -218,8 +200,7 @@ public class ImageUtil {
 	 *            The y coordinate.
 	 * @return The color at the given coordinates.
 	 */
-	public static Color getColorAt(final BufferedImage image, final int x,
-			final int y) {
+	public static Color getColorAt(final BufferedImage image, final int x, final int y) {
 		if (x >= 0 && y >= 0 && x < image.getWidth() && y < image.getHeight()) {
 			return new Color(image.getRGB(x, y));
 		}
@@ -273,8 +254,7 @@ public class ImageUtil {
 	 * @return A list of points where the color of the image is within the
 	 *         threshold.
 	 */
-	public static List<Point> getPointsWithColor(final BufferedImage image,
-			final Rectangle bounds, final Color color, final double threshold) {
+	public static List<Point> getPointsWithColor(final BufferedImage image, final Rectangle bounds, final Color color, final double threshold) {
 		final List<Point> points = new LinkedList<Point>();
 		final Color[][] colors = getColors(image);
 		for (int x = bounds.x; x < bounds.width; x++) {
@@ -299,8 +279,7 @@ public class ImageUtil {
 	 *            The color to scan for.
 	 * @return A list of points where the color of the image is equal.
 	 */
-	public static List<Point> getPointsWithColor(final BufferedImage image,
-			final Rectangle bounds, final Color color) {
+	public static List<Point> getPointsWithColor(final BufferedImage image, final Rectangle bounds, final Color color) {
 		return getPointsWithColor(image, bounds, color, 0.0);
 	}
 
@@ -317,11 +296,8 @@ public class ImageUtil {
 	 * @return A list of points where the color of the image is within the
 	 *         threshold.
 	 */
-	public static List<Point> getPointsWithColor(final BufferedImage image,
-			final Color color, final double threshold) {
-		return getPointsWithColor(image,
-				new Rectangle(image.getWidth(), image.getHeight()), color,
-				threshold);
+	public static List<Point> getPointsWithColor(final BufferedImage image, final Color color, final double threshold) {
+		return getPointsWithColor(image, new Rectangle(image.getWidth(), image.getHeight()), color, threshold);
 	}
 
 	/**
@@ -334,8 +310,7 @@ public class ImageUtil {
 	 *            The color to scan for.
 	 * @return A list of points where the color of the image is equal.
 	 */
-	public static List<Point> getPointsWithColor(final BufferedImage image,
-			final Color color) {
+	public static List<Point> getPointsWithColor(final BufferedImage image, final Color color) {
 		return getPointsWithColor(image, color, 0.0);
 	}
 
@@ -348,10 +323,8 @@ public class ImageUtil {
 	 *            The color to make transparent.
 	 * @return The altered image.
 	 */
-	public static BufferedImage makeColorTransparent(
-			final BufferedImage source, final Color color) {
-		final BufferedImage image = new BufferedImage(source.getWidth(),
-				source.getHeight(), BufferedImage.TYPE_INT_ARGB);
+	public static BufferedImage makeColorTransparent(final BufferedImage source, final Color color) {
+		final BufferedImage image = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TYPE_INT_ARGB);
 		final Graphics2D g = image.createGraphics();
 		g.setComposite(AlphaComposite.Src);
 		g.drawImage(image, null, 0, 0);
@@ -376,13 +349,10 @@ public class ImageUtil {
 	 *            The transparency factor to apply.
 	 * @return The altered image.
 	 */
-	public static BufferedImage makeImageTranslucent(
-			final BufferedImage source, final float transperancy) {
-		final BufferedImage image = new BufferedImage(source.getWidth(),
-				source.getHeight(), BufferedImage.TRANSLUCENT);
+	public static BufferedImage makeImageTranslucent(final BufferedImage source, final float transperancy) {
+		final BufferedImage image = new BufferedImage(source.getWidth(), source.getHeight(), BufferedImage.TRANSLUCENT);
 		final Graphics2D g = image.createGraphics();
-		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER,
-				transperancy));
+		g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, transperancy));
 		g.drawImage(image, null, 0, 0);
 		g.dispose();
 		return image;
@@ -433,15 +403,12 @@ public class ImageUtil {
 	 *            The new height.
 	 * @return The altered image.
 	 */
-	public static BufferedImage resize(final BufferedImage source,
-			final int width, final int height) {
+	public static BufferedImage resize(final BufferedImage source, final int width, final int height) {
 		final int w = source.getWidth();
 		final int h = source.getHeight();
-		final BufferedImage image = new BufferedImage(width, height,
-				source.getType());
+		final BufferedImage image = new BufferedImage(width, height, source.getType());
 		final Graphics2D g = image.createGraphics();
-		g.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-				RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+		g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 		g.drawImage(source, 0, 0, width, height, 0, 0, w, h, null);
 		g.dispose();
 		return image;
@@ -458,8 +425,7 @@ public class ImageUtil {
 	 *            The amount of rows.
 	 * @return The array of images derived from the source image.
 	 */
-	public static BufferedImage[] splitImage(final BufferedImage source,
-			final int cols, final int rows) {
+	public static BufferedImage[] splitImage(final BufferedImage source, final int cols, final int rows) {
 		final int w = source.getWidth() / cols;
 		final int h = source.getHeight() / rows;
 		int num = 0;
@@ -468,24 +434,22 @@ public class ImageUtil {
 			for (int x = 0; x < cols; x++) {
 				imgs[num] = new BufferedImage(w, h, source.getType());
 				final Graphics2D g = imgs[num].createGraphics();
-				g.drawImage(source, 0, 0, w, h, w * x, h * y, w * x + w, h * y
-						+ h, null);
+				g.drawImage(source, 0, 0, w, h, w * x, h * y, w * x + w, h * y + h, null);
 				g.dispose();
 				num++;
 			}
 		}
 		return imgs;
 	}
-	
-	public static BufferedImage splitImage(final BufferedImage source,
-			Rectangle rect) {
+
+	public static BufferedImage splitImage(final BufferedImage source, Rectangle rect) {
 		final int w = (int) rect.getWidth();
 		final int h = (int) rect.getHeight();
 
 		final BufferedImage img = new BufferedImage(w, h, source.getType());
 		final Graphics2D g = img.createGraphics();
-		g.drawImage(source, 0, 0, w, h, (int)rect.getX(), (int)rect.getY(), (int)rect.getX(), h * (int)rect.getY(), null);
-		
+		g.drawImage(source, 0, 0, w, h, (int) rect.getX(), (int) rect.getY(), (int) rect.getX(), h * (int) rect.getY(), null);
+
 		return img;
 	}
 }

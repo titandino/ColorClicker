@@ -24,8 +24,7 @@ public class ColorPoint {
 		this(p, new Color(r, g, b));
 	}
 
-	public ColorPoint(final int x, final int y, final int r, final int g,
-			final int b) {
+	public ColorPoint(final int x, final int y, final int r, final int g, final int b) {
 		this(new Point(x, y), new Color(r, g, b));
 	}
 

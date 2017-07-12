@@ -1,13 +1,13 @@
 package com.colorbot.script.impl;
 
 import java.awt.Color;
-import java.awt.Point;
 
 import com.colorbot.bot.Bot;
 import com.colorbot.script.Script;
+import com.colorbot.window.Point;
 
 public class Menaphites extends Script {
-	
+
 	@Override
 	public void process() {
 		try {
@@ -28,9 +28,9 @@ public class Menaphites extends Script {
 			} else {
 				Thread.sleep(Bot.random(400, 900));
 			}
-		} catch(Exception e) {
-			
+		} catch (Exception e) {
+
 		}
 	}
-	
+
 }

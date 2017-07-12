@@ -18,7 +18,7 @@ public class OCR {
 	public static String getOptionText() {
 		return RSText.getOptionsText();
 	}
-	
+
 	public static String getTextAt(Rectangle loc, FontTypes f) {
 		if (RSText.hasFonts()) {
 			return RSText.findString(null, loc, f);

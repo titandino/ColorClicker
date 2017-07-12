@@ -1,11 +1,13 @@
 package com.colorbot.bot;
 
 import java.awt.MouseInfo;
-import java.awt.Point;
 import java.util.Random;
+
+import com.colorbot.window.Point;
 
 /**
  * RSBot's human mouse movement calculations
+ * 
  * @author BenLand100
  */
 public class Mouse {
@@ -14,9 +16,9 @@ public class Mouse {
 	public static final int DEFAULT_MAX_MOVE_AFTER = 0;
 	public static final int msPerBit = 96;
 	public static final int reactionTime = 32;
-	
+
 	private final static Random random = new java.util.Random();
-	
+
 	public static Point getMouseLocation() {
 		return new Point((int) MouseInfo.getPointerInfo().getLocation().getX(), (int) MouseInfo.getPointerInfo().getLocation().getY());
 	}
@@ -118,8 +120,8 @@ public class Mouse {
 			percent = percent > 0.5 ? percent - 0.5 : percent;
 			percent += 0.25;
 			final int curVariance = (int) (ctrlVariance * percent);
-			cur.x = (int) (cur.x + curVariance * 2 * random.nextDouble() - curVariance);
-			cur.y = (int) (cur.y + curVariance * 2 * random.nextDouble() - curVariance);
+			cur.x = (short) (cur.x + curVariance * 2 * random.nextDouble() - curVariance);
+			cur.y = (short) (cur.y + curVariance * 2 * random.nextDouble() - curVariance);
 			result[i] = cur;
 		}
 		result[ctrlPoints + 1] = new Point(ex, ey);
@@ -154,7 +156,11 @@ public class Mouse {
 		Mouse.adaptiveMidpoints(spline);
 		return spline.toArray(new Point[spline.size()]);
 	}
-	
+
+	public static void moveMouse(Point p) {
+		moveMouse(p.x, p.y);
+	}
+
 	public static void moveMouse(int x, int y) {
 		moveMouse(x, y, 0);
 	}

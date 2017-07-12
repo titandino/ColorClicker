@@ -1,12 +1,12 @@
 package com.colorbot.util;
 
 import java.awt.Color;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import com.colorbot.bot.Bot;
+import com.colorbot.window.Point;
 
 /**
  * @Author Converted from Simba.
@@ -44,7 +44,7 @@ public class ColorUtil {
 		}
 		return count;
 	}
-	
+
 	public static Rectangle createRectangleFromPoints(ArrayList<Point> points) {
 		Point minPoint = new Point(Bot.SCREEN_WIDTH, Bot.SCREEN_HEIGHT), maxPoint = new Point(0, 0);
 		for (Point p : points) {
@@ -711,5 +711,13 @@ public class ColorUtil {
 	 */
 	public static double getDistance(final int rgb1, final int rgb2) {
 		return getDistance(new Color(rgb1), new Color(rgb2));
+	}
+
+	public static boolean areColorsWithinTolerance(Color c, ColorTolerance[] cts) {
+		for (ColorTolerance ct : cts) {
+			if (areColorsWithinTolerance(c, ct.getColor(), ct.getTolerance()))
+				return true;
+		}
+		return false;
 	}
 }

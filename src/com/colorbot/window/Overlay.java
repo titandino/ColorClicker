@@ -1,13 +1,5 @@
 package com.colorbot.window;
 
-import com.colorbot.bot.Bot;
-import com.sun.awt.AWTUtilities;
-import com.sun.jna.Native;
-import com.sun.jna.platform.win32.User32;
-import com.sun.jna.platform.win32.WinDef;
-import com.sun.jna.platform.win32.WinDef.HWND;
-import com.sun.jna.platform.win32.WinUser;
-
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -17,15 +9,23 @@ import java.awt.Window;
 
 import javax.swing.JComponent;
 
+import com.colorbot.bot.Bot;
+import com.sun.awt.AWTUtilities;
+import com.sun.jna.Native;
+import com.sun.jna.platform.win32.User32;
+import com.sun.jna.platform.win32.WinDef;
+import com.sun.jna.platform.win32.WinDef.HWND;
+import com.sun.jna.platform.win32.WinUser;
+
 public class Overlay {
 
 	private static Window w = new Window(null);
-	
+
 	public static JComponent ovl = new JComponent() {
 		private static final long serialVersionUID = 1L;
 
 		public void paintComponent(Graphics g) {
-			
+
 		}
 
 		public Dimension getPreferredSize() {

@@ -5,12 +5,7 @@ import java.awt.image.BufferedImage;
 public class Edge {
 
 	public enum DetectMethod {
-		Sobel(new int[][] { { -1, 0, 1 }, { -2, 0, 2 }, { -1, 0, 1 } },
-				new int[][] { { 1, 2, 1 }, { 0, 0, 0 }, { -1, -2, -1 } }), Cross(
-				new int[][] { { 1, 0 }, { 0, -1 } }, new int[][] { { 0, 1 },
-						{ -1, 0 } }), Prewitt(new int[][] { { -1, 0, 1 },
-				{ -1, 0, 1 }, { -1, 0, 1 } }, new int[][] { { 1, 1, 1 },
-				{ 0, 0, 0 }, { -1, -1, -1 } });
+		Sobel(new int[][] { { -1, 0, 1 }, { -2, 0, 2 }, { -1, 0, 1 } }, new int[][] { { 1, 2, 1 }, { 0, 0, 0 }, { -1, -2, -1 } }), Cross(new int[][] { { 1, 0 }, { 0, -1 } }, new int[][] { { 0, 1 }, { -1, 0 } }), Prewitt(new int[][] { { -1, 0, 1 }, { -1, 0, 1 }, { -1, 0, 1 } }, new int[][] { { 1, 1, 1 }, { 0, 0, 0 }, { -1, -1, -1 } });
 		private int[][] X;
 		private int[][] Y;
 
@@ -48,8 +43,7 @@ public class Edge {
 	}
 
 	private BufferedImage cloneImage(BufferedImage image) {
-		return new BufferedImage(image.getColorModel(), image.copyData(null),
-				image.isAlphaPremultiplied(), null);
+		return new BufferedImage(image.getColorModel(), image.copyData(null), image.isAlphaPremultiplied(), null);
 	}
 
 	public BufferedImage detectEdges(BufferedImage image, DetectMethod method) {
@@ -59,16 +53,13 @@ public class Edge {
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
 				int level = 255;
-				if ((x > 0) && (x < (width - 1)) && (y > 0)
-						&& (y < (height - 1))) {
+				if ((x > 0) && (x < (width - 1)) && (y > 0) && (y < (height - 1))) {
 					int sumX = 0;
 					int sumY = 0;
 					for (int i = -1; i < (method.getX().length - 1); i++) {
 						for (int j = -1; j < (method.getY().length - 1); j++) {
-							sumX += this.rgdToLum(image.getRGB(x + i, y + j))
-									* method.getX()[i + 1][j + 1];
-							sumY += this.rgdToLum(image.getRGB(x + i, y + j))
-									* method.getY()[i + 1][j + 1];
+							sumX += this.rgdToLum(image.getRGB(x + i, y + j)) * method.getX()[i + 1][j + 1];
+							sumY += this.rgdToLum(image.getRGB(x + i, y + j)) * method.getY()[i + 1][j + 1];
 						}
 					}
 					level = Math.abs(sumX) + Math.abs(sumY);
