@@ -16,6 +16,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
 
+import com.colorbot.bot.RSText.FontTypes;
 import com.colorbot.script.Script;
 import com.colorbot.script.impl.*;
 import com.colorbot.task.TaskExecutor;
@@ -45,12 +46,15 @@ public class Bot {
 		if (region[0] != 0 && region[1] != 0) {
 			healthLocation = new Rectangle(region[0]+10, region[1]+9, 89, 8);
 			BotFrame.log("Found health location at: " + Arrays.toString(region));
-			System.out.println("Health: " + OCR.getTextAt(new Rectangle((int) healthLocation.getX(), (int) healthLocation.getY(), (int) healthLocation.getWidth()-70, (int) healthLocation.getHeight()-23)));
-			Overlay.drawRect(new Rectangle((int) healthLocation.getX(), (int) healthLocation.getY(), (int) healthLocation.getWidth()-70, (int) healthLocation.getHeight()-23));
-			Rectangle xpTest = new Rectangle(33, 48, 30, 15);
-			System.out.println(OCR.getTextAt(xpTest));
-			Overlay.drawRect(xpTest);
+			//System.out.println("Health: " + OCR.getTextAt(new Rectangle((int) healthLocation.getX(), (int) healthLocation.getY(), (int) healthLocation.getWidth()-70, (int) healthLocation.getHeight()-23)));
+			//Overlay.drawRect(new Rectangle((int) healthLocation.getX(), (int) healthLocation.getY(), (int) healthLocation.getWidth()-70, (int) healthLocation.getHeight()-23));
+			//TODO make fontset for xp coujnter/hp
 		}
+	}
+	
+	public static String getHoverOption() {
+		Rectangle xpTest = new Rectangle(0, 20, 100, 30);
+		return OCR.getTextAt(xpTest, FontTypes.UpCharsEx);
 	}
 
 	public static void init() throws IOException {
@@ -287,6 +291,11 @@ public class Bot {
 		}
 	}
 
+	public static Color getColorAt(BufferedImage i, Point p) {
+		int[] pixel = i.getRaster().getPixel(p.x, p.y, new int[3]);
+		return new Color(pixel[0], pixel[1], pixel[2]);
+	}
+	
 	public static Color getColorAt(BufferedImage i, int x, int y) {
 		int[] pixel = i.getRaster().getPixel(x, y, new int[3]);
 		return new Color(pixel[0], pixel[1], pixel[2]);

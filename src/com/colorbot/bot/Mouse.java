@@ -12,8 +12,8 @@ public class Mouse {
 
 	public static final int DEFAULT_MOUSE_SPEED = 10;
 	public static final int DEFAULT_MAX_MOVE_AFTER = 0;
-	public static final int msPerBit = 105;
-	public static final int reactionTime = 0;
+	public static final int msPerBit = 96;
+	public static final int reactionTime = 32;
 	
 	private final static Random random = new java.util.Random();
 	
@@ -106,8 +106,8 @@ public class Mouse {
 		ctrlPoints = ctrlPoints * ctrlSpacing == dist ? ctrlPoints - 1 : ctrlPoints;
 		if (ctrlPoints <= 1) {
 			ctrlPoints = 2;
-			ctrlSpacing = (int) dist / 3;
-			ctrlVariance = (int) dist / 2;
+			ctrlSpacing = (int) dist / Bot.random(2, 6);
+			ctrlVariance = (int) dist / Bot.random(2, 4);
 		}
 		final Point[] result = new Point[ctrlPoints + 2];
 		result[0] = new Point(sx, sy);
@@ -177,15 +177,14 @@ public class Mouse {
 			if ((x2 == x1) && (y2 == y1)) {
 				return;
 			}
-			final Point[] controls = Mouse.generateControls(x1, y1, x2 + random.nextInt(randX), y2 + random.nextInt(randY), 50, 120);
+			final Point[] controls = Mouse.generateControls(x1, y1, x2 + random.nextInt(randX), y2 + random.nextInt(randY), Bot.random(100, 200), Bot.random(100, 160));
 			final Point[] spline = Mouse.generateSpline(controls);
 			final long timeToMove = Mouse.fittsLaw(Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)), 10);
-			final Point[] path = Mouse.applyDynamism(spline, (int) timeToMove, Mouse.DEFAULT_MOUSE_SPEED);
-			//final Point[] path = spline;
+			final Point[] path = Mouse.applyDynamism(spline, (int) timeToMove, Bot.MOUSE_SPEED);
 			for (final Point aPath : path) {
 				Bot.robot.mouseMove(aPath.x, aPath.y);
 				try {
-					Thread.sleep(Math.max(0, speed - 2 + random.nextInt(4)));
+					Thread.sleep(Math.max(0, speed + random.nextInt(3)));
 				} catch (final InterruptedException e) {
 					throw new RuntimeException(e);
 				}

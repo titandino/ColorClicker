@@ -11,7 +11,7 @@ public class Menaphites extends Script {
 	@Override
 	public void process() {
 		try {
-			Bot.MOUSE_SPEED = Bot.random(2, 5);
+			Bot.MOUSE_SPEED = Bot.random(3, 6);
 			if (Bot.getHealthPercent() > 20) {
 				Point p1 = Bot.getPointWithColorCombo(new Color(64, 201, 243), new Color(90, 46, 210), 10, 20);
 				if (p1 == null)

@@ -1,4 +1,4 @@
-package com.colorbot.bot;
+package com.colorbot.util;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;

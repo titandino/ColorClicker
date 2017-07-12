@@ -1,10 +1,12 @@
-package com.colorbot.bot;
+package com.colorbot.util;
 
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+
+import com.colorbot.bot.Bot;
 
 /**
  * @Author Converted from Simba.
@@ -42,6 +44,21 @@ public class ColorUtil {
 		}
 		return count;
 	}
+	
+	public static Rectangle createRectangleFromPoints(ArrayList<Point> points) {
+		Point minPoint = new Point(Bot.SCREEN_WIDTH, Bot.SCREEN_HEIGHT), maxPoint = new Point(0, 0);
+		for (Point p : points) {
+			if (p.x < minPoint.x)
+				minPoint.x = p.x;
+			if (p.x > maxPoint.x)
+				maxPoint.x = p.x;
+			if (p.y < minPoint.y)
+				minPoint.y = p.y;
+			if (p.y > maxPoint.y)
+				maxPoint.y = p.y;
+		}
+		return new Rectangle(minPoint.x, minPoint.y, (maxPoint.x - minPoint.x) + 1, (maxPoint.y - minPoint.y) + 1);
+	}
 
 	/**
 	 * 
@@ -51,9 +68,10 @@ public class ColorUtil {
 	 *            second color
 	 * @param radius
 	 *            radius to search for from the first Color.
-	 * @return the Point of the first found location of the specified second color
+	 * @return the Point of the first found location of the specified second
+	 *         color
 	 */
-	public Point findColorInRadius(Color c1, Color c2, int radius) {
+	public Point findColorInRadius(BufferedImage image, Color c1, Color c2, int radius) {
 		Point p[];
 		Point start, end;
 		if ((p = findAllColor(c1)) != null) {
@@ -63,9 +81,8 @@ public class ColorUtil {
 				for (int i = start.x; i < end.x; i++) {
 					for (int j = start.y; j < end.y; j++) {
 						// See if point is less than radius
-						if (Math.abs(getDistanceBetween(p2,
-								new Point(i, j))) <= radius) {
-							if (getColor(i, j).equals(c2)) {
+						if (Math.abs(getDistanceBetween(p2, new Point(i, j))) <= radius) {
+							if (getColor(image, i, j).equals(c2)) {
 								return new Point(i, j);
 							}
 						}
@@ -75,7 +92,7 @@ public class ColorUtil {
 		}
 		return null;
 	}
-	
+
 	public static int getDistanceBetween(final Point p1, final Point p2) {
 		if (p1 == null || p2 == null) {
 			return -1;
@@ -85,75 +102,77 @@ public class ColorUtil {
 		return (int) Math.sqrt(xDiff * xDiff + yDiff * yDiff);
 	}
 
-    /**
-     *
-     * @param c1
-     *            first color
-     * @param c2
-     *            second color
-     * @param radius
-     *            radius to search for from the first Color.
-     * @param tolerance
-     *            integer that represents color tolerance, for instance 5 = new color(5,5,5)
-     * @return the Point of the first found location of the specified second color
-     */
-    public Point findColorInRadiusWithinTolerance(Color c1, Color c2, int radius,int tolerance) {
-        Point p[];
-        Point start, end;
-        if ((p = findAllColor(c1)) != null) {
-            for (Point p2 : p) {
-                start = new Point(p2.x - radius, p2.y - radius);
-                end = new Point(p2.x + radius, p2.y + radius);
-                for (int i = start.x; i < end.x; i++) {
-                    for (int j = start.y; j < end.y; j++) {
-                        // See if point is less than radius
-                        if (Math.abs(getDistanceBetween(p2,
-                                new Point(i, j))) <= radius) {
-                            if (areColorsWithinTolerance(getColor(i, j),c2, tolerance)){
-                                return new Point(i, j);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return null;
-    }
+	/**
+	 *
+	 * @param c1
+	 *            first color
+	 * @param c2
+	 *            second color
+	 * @param radius
+	 *            radius to search for from the first Color.
+	 * @param tolerance
+	 *            integer that represents color tolerance, for instance 5 = new
+	 *            color(5,5,5)
+	 * @return the Point of the first found location of the specified second
+	 *         color
+	 */
+	public Point findColorInRadiusWithinTolerance(BufferedImage image, Color c1, Color c2, int radius, int tolerance) {
+		Point p[];
+		Point start, end;
+		if ((p = findAllColor(c1)) != null) {
+			for (Point p2 : p) {
+				start = new Point(p2.x - radius, p2.y - radius);
+				end = new Point(p2.x + radius, p2.y + radius);
+				for (int i = start.x; i < end.x; i++) {
+					for (int j = start.y; j < end.y; j++) {
+						// See if point is less than radius
+						if (Math.abs(getDistanceBetween(p2, new Point(i, j))) <= radius) {
+							if (areColorsWithinTolerance(getColor(image, i, j), c2, tolerance)) {
+								return new Point(i, j);
+							}
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}
 
-    /**
-     *
-     * @param c1
-     *            first color
-     * @param c2
-     *            second color
-     * @param radius
-     *            radius to search for from the first Color.
-     * @param tolerance
-     *            color object that represents tolerance
-     * @return the Point of the first found location of the specified second color
-     */
-    public Point findColorInRadiusWithinTolerance(Color c1, Color c2, int radius,Color tolerance) {
-        Point p[];
-        Point start, end;
-        if ((p = findAllColor(c1)) != null) {
-            for (Point p2 : p) {
-                start = new Point(p2.x - radius, p2.y - radius);
-                end = new Point(p2.x + radius, p2.y + radius);
-                for (int i = start.x; i < end.x; i++) {
-                    for (int j = start.y; j < end.y; j++) {
-                        // See if point is less than radius
-                        if (Math.abs(getDistanceBetween(p2,
-                                new Point(i, j))) <= radius) {
-                            if (areColorsWithinTolerance(getColor(i, j),c2, tolerance)){
-                                return new Point(i, j);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return null;
-    }
+	/**
+	 *
+	 * @param c1
+	 *            first color
+	 * @param c2
+	 *            second color
+	 * @param radius
+	 *            radius to search for from the first Color.
+	 * @param tolerance
+	 *            color object that represents tolerance
+	 * @return the Point of the first found location of the specified second
+	 *         color
+	 */
+	public Point findColorInRadiusWithinTolerance(BufferedImage b, Color c1, Color c2, int radius, Color tolerance) {
+		Point p[];
+		Point start, end;
+		if ((p = findAllColor(c1)) != null) {
+			for (Point p2 : p) {
+				start = new Point(p2.x - radius, p2.y - radius);
+				end = new Point(p2.x + radius, p2.y + radius);
+				for (int i = start.x; i < end.x; i++) {
+					for (int j = start.y; j < end.y; j++) {
+						// See if point is less than radius
+						if (Math.abs(getDistanceBetween(p2, new Point(i, j))) <= radius) {
+							if (areColorsWithinTolerance(getColor(b, i, j), c2, tolerance)) {
+								return new Point(i, j);
+							}
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}
+
 	/**
 	 * 
 	 * @param c
@@ -176,42 +195,19 @@ public class ColorUtil {
 	 * 
 	 * @param c
 	 *            the desired color.
-	 * @param tolerance
-	 *            - the rgb values which can vary. If c = new Color(200,200,200)
-	 *            Such as tolerance = new Color(11,3,4) it could return anywhere
-	 *            from (189,197,196) - (211,203,204)
-	 * @return Point location
-	 */
-	public static Point findColorWithinTolerance(Color c, Color tolerance) {
-		BufferedImage b = getScreen();
-		for (int i = 0; i < b.getWidth(); i++) {
-			for (int j = 0; j < b.getWidth(); j++) {
-                if(areColorsWithinTolerance(getColor(i,j),c,tolerance)){
-                    return new Point(i,j);
-                }
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * 
-	 * @param c
-	 *            the desired color.
 	 * @param t
 	 *            - the rgb values which can vary. If c = new Color(200,200,200)
 	 *            Such as t = 10 it could return anywhere from (190,190,190) -
 	 *            (210,210,210)
 	 * @return Point location
 	 */
-	public static Point findColorWithinTolerance(Color c, int t) {
-		BufferedImage b = getScreen();
+	public static Point findColorWithinTolerance(BufferedImage b, Color c, int t) {
 		Color tolerance = new Color(t, t, t);
 		for (int i = 0; i < b.getWidth(); i++) {
 			for (int j = 0; j < b.getHeight(); j++) {
-                if(areColorsWithinTolerance(getColor(i,j),c,tolerance)){
-                    return new Point(i,j);
-                }
+				if (areColorsWithinTolerance(getColor(b, i, j), c, tolerance)) {
+					return new Point(i, j);
+				}
 			}
 		}
 		return null;
@@ -250,38 +246,12 @@ public class ColorUtil {
 	 *            color specified within tolerance
 	 * @return Point location
 	 */
-	public static Point findColorWithinTolerance(Color c, Color tolerance,
-			BufferedImage b) {
+	public static Point findColorWithinTolerance(BufferedImage b, Color c, Color tolerance) {
 		for (int i = 0; i < b.getWidth(); i++) {
 			for (int j = 0; j < b.getHeight(); j++) {
-				if(areColorsWithinTolerance(getColor(i,j),c,tolerance)){
-                    return new Point(i,j);
-                }
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * 
-	 * @param c
-	 *            the desired color.
-	 * @param t
-	 *            - the rgb values which can vary. If c = new Color(200,200,200)
-	 *            Such as t = 10 it could return anywhere from (190,190,190) -
-	 *            (210,210,210)
-	 * @param b
-	 *            - the buffered image in which you would like to search for the
-	 *            color specified within tolerance
-	 * @return Point location
-	 */
-	public static Point findColorWithinTolerance(Color c, int t, BufferedImage b) {
-		Color tolerance = new Color(t, t, t);
-		for (int i = 0; i < b.getWidth(); i++) {
-			for (int j = 0; j < b.getHeight(); j++) {
-                if(areColorsWithinTolerance(getColor(i,j),c,tolerance)){
-                    return new Point(i,j);
-                }
+				if (areColorsWithinTolerance(getColor(b, i, j), c, tolerance)) {
+					return new Point(i, j);
+				}
 			}
 		}
 		return null;
@@ -321,14 +291,12 @@ public class ColorUtil {
 	 *            search for the color specified within tolerance
 	 * @return Point location
 	 */
-	public static Point findColorWithinTolerance(Color c, Color tolerance,
-			Rectangle r) {
-		BufferedImage b = getScreenPart(r);
+	public static Point findColorWithinTolerance(BufferedImage b, Color c, Color tolerance, Rectangle r) {
 		for (int i = 0; i < b.getWidth(); i++) {
 			for (int j = 0; j < b.getHeight(); j++) {
-                if(areColorsWithinTolerance(getColor(i,j),c,tolerance)){
-                    return new Point(i,j);
-                }
+				if (areColorsWithinTolerance(getColor(b, i, j), c, tolerance)) {
+					return new Point(i, j);
+				}
 			}
 		}
 		return null;
@@ -347,14 +315,13 @@ public class ColorUtil {
 	 *            search for the color specified within tolerance
 	 * @return Point location
 	 */
-	public static Point findColorWithinTolerance(Color c, int t, Rectangle r) {
+	public static Point findColorWithinTolerance(BufferedImage b, Color c, int t, Rectangle r) {
 		Color tolerance = new Color(t, t, t);
-		BufferedImage b = getScreenPart(r);
 		for (int i = 0; i < b.getWidth(); i++) {
 			for (int j = 0; j < b.getHeight(); j++) {
-                if(areColorsWithinTolerance(getColor(i,j),c,tolerance)){
-                    return new Point(i,j);
-                }
+				if (areColorsWithinTolerance(getColor(b, i, j), c, tolerance)) {
+					return new Point(i, j);
+				}
 			}
 		}
 		return null;
@@ -394,21 +361,16 @@ public class ColorUtil {
 	 * 
 	 * @return Point location array
 	 */
-	public static Point[] findAllColorWithinTolerance(Color c, Color tolerance) {
+	public static ArrayList<Point> findAllColorWithinTolerance(BufferedImage b, Color c, Color tolerance) {
 		ArrayList<Point> list = new ArrayList<Point>();
-		BufferedImage b = getScreen();
 		for (int i = 0; i < b.getWidth(); i++) {
 			for (int j = 0; j < b.getHeight(); j++) {
-                if(areColorsWithinTolerance(getColor(i,j),c,tolerance)){
-                    list.add(new Point(i,j));
-                }
+				if (areColorsWithinTolerance(getColor(b, i, j), c, tolerance)) {
+					list.add(new Point(i, j));
+				}
 			}
 		}
-		Point p[] = new Point[list.size()];
-		for (int i = 0; i < p.length; i++) {
-			p[i] = list.get(i);
-		}
-		return p;
+		return list;
 	}
 
 	/**
@@ -441,37 +403,6 @@ public class ColorUtil {
 	 *            desired Color
 	 * @param b
 	 *            the buffered image in which you would like to search
-	 * @param tolerance
-	 *            - the rgb values which can vary. If c = new Color(200,200,200)
-	 *            Such as tolerance = new Color(11,3,4) it could return anywhere
-	 *            from (189,197,196) - (211,203,204)
-	 * 
-	 * @return - Array of point locations for the color within the specified
-	 *         tolerance within the buffered image
-	 */
-	public static Point[] findAllColorWithinTolerance(Color c, BufferedImage b,
-			Color tolerance) {
-		ArrayList<Point> list = new ArrayList<Point>();
-		for (int i = 0; i < b.getWidth(); i++) {
-			for (int j = 0; j < b.getHeight(); j++) {
-                if(areColorsWithinTolerance(getColor(i,j),c,tolerance)){
-                    list.add(new Point(i,j));
-                }
-			}
-		}
-		Point p[] = new Point[list.size()];
-		for (int i = 0; i < p.length; i++) {
-			p[i] = list.get(i);
-		}
-		return p;
-	}
-
-	/**
-	 * 
-	 * @param c
-	 *            desired Color
-	 * @param b
-	 *            the buffered image in which you would like to search
 	 * @param t
 	 *            - the rgb values which can vary. If c = new Color(200,200,200)
 	 *            Such as t = 10 it could return anywhere from (190,190,190) -
@@ -480,14 +411,13 @@ public class ColorUtil {
 	 * @return - Array of point locations for the color within the specified
 	 *         tolerance within the buffered image
 	 */
-	public static Point[] findAllColorWithinTolerance(Color c, BufferedImage b,
-			int t) {
+	public static Point[] findAllColorWithinTolerance(BufferedImage b, Color c, int t) {
 		Color tolerance = new Color(t, t, t);
 		ArrayList<Point> list = new ArrayList<Point>();
 		for (int i = 0; i < b.getWidth(); i++) {
 			for (int j = 0; j < b.getHeight(); j++) {
-                if(areColorsWithinTolerance(getColor(i,j),c,tolerance)){
-                    list.add(new Point(i,j));
+				if (areColorsWithinTolerance(getColor(b, i, j), c, tolerance)) {
+					list.add(new Point(i, j));
 				}
 			}
 		}
@@ -538,15 +468,13 @@ public class ColorUtil {
 	 * @return - Array of point locations for the color within the specified
 	 *         tolerance within the buffered image
 	 */
-	public static Point[] findAllColorWithinTolerance(Color c, Rectangle r,
-			Color tolerance) {
-		BufferedImage b = getScreenPart(r);
+	public static Point[] findAllColorWithinTolerance(BufferedImage b, Color c, Rectangle r, Color tolerance) {
 		ArrayList<Point> list = new ArrayList<Point>();
 		for (int i = 0; i < b.getWidth(); i++) {
 			for (int j = 0; j < b.getHeight(); j++) {
-                if(areColorsWithinTolerance(getColor(i,j),c,tolerance)){
-                    list.add(new Point(i,j));
-                }
+				if (areColorsWithinTolerance(getColor(b, i, j), c, tolerance)) {
+					list.add(new Point(i, j));
+				}
 			}
 		}
 		Point p[] = new Point[list.size()];
@@ -571,16 +499,14 @@ public class ColorUtil {
 	 * @return - Array of point locations for the color within the specified
 	 *         tolerance within the buffered image
 	 */
-	public static Point[] findAllColorWithinTolerance(Color c, Rectangle r,
-			int t) {
-		BufferedImage b = getScreenPart(r);
+	public static Point[] findAllColorWithinTolerance(BufferedImage b, Color c, Rectangle r, int t) {
 		Color tolerance = new Color(t, t, t);
 		ArrayList<Point> list = new ArrayList<Point>();
 		for (int i = 0; i < b.getWidth(); i++) {
 			for (int j = 0; j < b.getHeight(); j++) {
-                if(areColorsWithinTolerance(getColor(i,j),c,tolerance)){
-                    list.add(new Point(i,j));
-                }
+				if (areColorsWithinTolerance(getColor(b, i, j), c, tolerance)) {
+					list.add(new Point(i, j));
+				}
 			}
 		}
 		Point p[] = new Point[list.size()];
@@ -611,9 +537,8 @@ public class ColorUtil {
 	 *            The y coordinate of the point at which you desire a color.
 	 * @return The color at the coordinates specified.
 	 */
-	public static Color getColor(int x, int y) {
-		BufferedImage b = getScreen();
-		return new java.awt.Color(b.getRGB(x, y));
+	public static Color getColor(BufferedImage image, int x, int y) {
+		return new java.awt.Color(image.getRGB(x, y));
 	}
 
 	/**
@@ -649,12 +574,9 @@ public class ColorUtil {
 	 * @return BufferedImage of the given rectangle.
 	 */
 	public static BufferedImage getScreenPart(Rectangle area) {
-		if (area.x > 0 && area.x < 756 && area.x + area.width > 0
-				&& area.x + area.width < 756) {
-			if (area.y > 0 && area.y < 756 && area.y + area.height > 0
-					&& area.y + area.height < 756) {
-				return getScreen().getSubimage(area.x, area.y, area.width,
-						area.height);
+		if (area.x > 0 && area.x < Bot.SCREEN_WIDTH && area.x + area.width > 0 && area.x + area.width < Bot.SCREEN_WIDTH) {
+			if (area.y > 0 && area.y < Bot.SCREEN_HEIGHT && area.y + area.height > 0 && area.y + area.height < Bot.SCREEN_HEIGHT) {
+				return getScreen().getSubimage(area.x, area.y, area.width, area.height);
 			}
 		}
 		return null;
@@ -689,19 +611,13 @@ public class ColorUtil {
 	 *            the second color param t - the rgb values which can vary. If c
 	 *            = new Color(200,200,200) Such as tolerance = 10) it could
 	 *            return anywhere from (190,190,190) - (210,210,210)
-	 * @param t tolerance
-     * @return true if the colors are within the tolerance
+	 * @param t
+	 *            tolerance
+	 * @return true if the colors are within the tolerance
 	 */
-	public static boolean areColorsWithinTolerance(Color color1, Color color2,
-			int t) {
+	public static boolean areColorsWithinTolerance(Color color1, Color color2, int t) {
 		Color tolerance = new Color(t, t, t);
-		return (color1.getRed() - color2.getRed() < tolerance.getRed() && color1
-				.getRed() - color2.getRed() > -tolerance.getRed())
-				&& (color1.getBlue() - color2.getBlue() < tolerance.getBlue() && color1
-						.getBlue() - color2.getBlue() > -tolerance.getBlue())
-				&& (color1.getGreen() - color2.getGreen() < tolerance
-						.getGreen() && color1.getGreen() - color2.getGreen() > -tolerance
-						.getGreen());
+		return (color1.getRed() - color2.getRed() < tolerance.getRed() && color1.getRed() - color2.getRed() > -tolerance.getRed()) && (color1.getBlue() - color2.getBlue() < tolerance.getBlue() && color1.getBlue() - color2.getBlue() > -tolerance.getBlue()) && (color1.getGreen() - color2.getGreen() < tolerance.getGreen() && color1.getGreen() - color2.getGreen() > -tolerance.getGreen());
 	}
 
 	/**
@@ -715,15 +631,8 @@ public class ColorUtil {
 	 *            (211,203,204)
 	 * @return true if the colors are within the tolerance
 	 */
-	public static boolean areColorsWithinTolerance(Color color1, Color color2,
-			Color tolerance) {
-		return (color1.getRed() - color2.getRed() < tolerance.getRed() && color1
-				.getRed() - color2.getRed() > -tolerance.getRed())
-				&& (color1.getBlue() - color2.getBlue() < tolerance.getBlue() && color1
-						.getBlue() - color2.getBlue() > -tolerance.getBlue())
-				&& (color1.getGreen() - color2.getGreen() < tolerance
-						.getGreen() && color1.getGreen() - color2.getGreen() > -tolerance
-						.getGreen());
+	public static boolean areColorsWithinTolerance(Color color1, Color color2, Color tolerance) {
+		return (Math.abs(color1.getRed() - color2.getRed()) < tolerance.getRed()) && (Math.abs(color1.getBlue() - color2.getBlue()) < tolerance.getBlue()) && (Math.abs(color1.getGreen() - color2.getGreen()) < tolerance.getGreen());
 	}
 
 	/**
@@ -744,8 +653,7 @@ public class ColorUtil {
 	 *            Blue value of the second color.
 	 * @return The "distance" between the two colors.
 	 */
-	public static double getDistance(double r1, double g1, double b1,
-			double r2, double g2, double b2) {
+	public static double getDistance(double r1, double g1, double b1, double r2, double g2, double b2) {
 		double red = r2 - r1;
 		double green = g2 - g1;
 		double blue = b2 - b1;

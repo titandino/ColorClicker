@@ -50,7 +50,7 @@ public class RSText {
 	 * 
 	 */
 	public static enum FontTypes {
-		BigChars, CharsNPC, FriendChars, LoginChars, SmallChars, StatChars, UpChars, UpCharsEx
+		BigChars, CharsNPC, FriendChars, LoginChars, SmallChars, StatChars, UpChars, UpCharsEx, XPChars, SmallCharsNS
 	}
 
 	/**
@@ -59,7 +59,8 @@ public class RSText {
 	 */
 	public static class AllFonts {
 		public static String[] FONT_NAMES = { "BigChars", "CharsNPC", "FriendChars", "LoginChars", "SmallChars", "StatChars", "UpChars", "UpCharsEx", "XPChars", "SmallCharsNS" };
-		public static final Font[][] ALL_LETTERS = new Font[FONT_NAMES.length][62];
+		//public static String[] FONT_NAMES = { "XPChars" };
+		public static final Font[][] ALL_LETTERS = new Font[FONT_NAMES.length][127];
 
 		public AllFonts() {
 			for (int i = 0; i < ALL_LETTERS.length; i++) {
@@ -80,27 +81,14 @@ public class RSText {
 	 */
 	public static Font[] grabFontset(Font[] fontset, String fontname) {
 		int cnt = 0;
-		int i;
 		try {
-			for (i = 48; i < 58; i++) {
+			BotFrame.log("Loading font: " + fontname);
+			for (int i = 0; i < fontset.length; i++) {
 				if (!new File(d + "/" + fontname + "/" + i + ".bmp").exists())
 					continue;
 				final BufferedImage img = ImageIO.read(new File(d + "/" + fontname + "/" + i + ".bmp"));
 				fontset[cnt++] = grabPoints(img, (char) i);
 			}
-			for (i = 65; i < 91; i++) {
-				if (!new File(d + "/" + fontname + "/" + i + ".bmp").exists())
-					continue;
-				final BufferedImage img = ImageIO.read(new File(d + "/" + fontname + "/" + i + ".bmp"));
-				fontset[cnt++] = grabPoints(img, (char) i);
-			}
-			for (i = 97; i < 123; i++) {
-				if (!new File(d + "/" + fontname + "/" + i + ".bmp").exists())
-					continue;
-				final BufferedImage img = ImageIO.read(new File(d + "/" + fontname + "/" + i + ".bmp"));
-				fontset[cnt++] = grabPoints(img, (char) i);
-			}
-			BotFrame.log("Loaded font: " + fontname);
 		} catch (IOException ignored) {
 			
 		}
@@ -228,20 +216,20 @@ public class RSText {
 						i = AllFonts.ALL_LETTERS.length;
 					}
 					M2: for (Font aCurFont : curFont) {
-						if (aCurFont == null)
+						if (aCurFont == null || aCurFont.goodpts.length <= 0)
 							continue;
 						final Rectangle loc = new Rectangle(x - aCurFont.goodpts[0].x, y - aCurFont.goodpts[0].y, aCurFont.letbox.width, aCurFont.letbox.height);
 						if (!rec.contains(loc))
 							continue;
 						for (int k = 0; k < aCurFont.goodpts.length; k++) {
-							if (!checkColor(Bot.getColorAt(screen, loc.x + aCurFont.goodpts[k].x, loc.y + aCurFont.goodpts[k].y), c, 100))
+							if (!checkColor(Bot.getColorAt(screen, loc.x + aCurFont.goodpts[k].x, loc.y + aCurFont.goodpts[k].y), c, 100)) {
 								continue M2;
+							}
 						}
 						for (int k = 0; k < aCurFont.badpts.length; k++) {
 							if (checkColor(Bot.getColorAt(screen, loc.x + aCurFont.badpts[k].x, loc.y + aCurFont.badpts[k].y), c, 100))
 								continue M2;
 						}
-
 						nums.add(new Letter(aCurFont.letter, loc.x, loc.x + aCurFont.letbox.width));
 						foundFont = curFont;
 						fontC = c;

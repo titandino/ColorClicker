@@ -3,6 +3,8 @@ package com.colorbot.bot;
 import java.awt.Color;
 import java.awt.Rectangle;
 
+import com.colorbot.bot.RSText.FontTypes;
+
 public class OCR {
 
 	public static String getUpText() {
@@ -15,6 +17,14 @@ public class OCR {
 
 	public static String getOptionText() {
 		return RSText.getOptionsText();
+	}
+	
+	public static String getTextAt(Rectangle loc, FontTypes f) {
+		if (RSText.hasFonts()) {
+			return RSText.findString(null, loc, f);
+		} else {
+			return getUpText();
+		}
 	}
 
 	public static String getTextAt(Rectangle loc) {
