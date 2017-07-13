@@ -14,8 +14,8 @@ public class Mouse {
 
 	public static final int DEFAULT_MOUSE_SPEED = 10;
 	public static final int DEFAULT_MAX_MOVE_AFTER = 0;
-	public static final int msPerBit = 96;
-	public static final int reactionTime = 32;
+	public static final int msPerBit = 35;
+	public static final int reactionTime = 2;
 
 	private final static Random random = new java.util.Random();
 
