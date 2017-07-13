@@ -7,7 +7,6 @@ import com.colorbot.bot.Mouse;
 import com.colorbot.script.Script;
 import com.colorbot.util.ColorTolerance;
 import com.colorbot.util.PointCluster;
-import com.colorbot.window.BotFrame;
 import com.colorbot.window.Overlay;
 
 public class RuneSpan extends Script {
@@ -17,13 +16,12 @@ public class RuneSpan extends Script {
 	@Override
 	public void process() {
 		try {
-			Bot.MOUSE_SPEED = 2;
-			PointCluster closest = Bot.findClosestColorCluster(20, 50, siphon.getCTs());
-			BotFrame.log("Closest cluster: " + closest);
+			Bot.MOUSE_SPEED = 1;
+			PointCluster closest = Bot.findClosestColorCluster(20, 20, siphon.getCTs());
 			if (closest != null) {
 				closest.render(Overlay.ovl.getGraphics());
 				Overlay.ovl.repaint();
-				Mouse.moveMouse(closest.getCenter());
+				Mouse.moveMouse(closest.getCenter()); //TODO fix mouse movement speed being so damn slow
 				if (Bot.getHoverOption().contains("Siphon")) {
 					Bot.click();
 					Thread.sleep(Bot.random(7000, 16000));

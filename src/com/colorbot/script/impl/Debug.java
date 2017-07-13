@@ -12,7 +12,6 @@ public class Debug extends Script {
 		try {
 			Color c = Bot.getColorOnMouse();
 			BotFrame.log("Color you are hovering: (" + c.getRed() + ", " + c.getGreen() + ", " + c.getBlue() + ")");
-			BotFrame.log("Health distance: " + Bot.getHealthPercent());
 			Thread.sleep(500);
 		} catch (InterruptedException e) {
 

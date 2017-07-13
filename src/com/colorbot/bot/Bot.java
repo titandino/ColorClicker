@@ -69,7 +69,7 @@ public class Bot {
 		int min = 50000;
 		for (PointCluster cluster : clusters) {
 			int dist = ColorUtil.getDistanceBetween(
-					new Point((int) cluster.getBoundingBox().getCenterX(), (int) cluster.getBoundingBox().getCenterY()),
+					new Point((int) cluster.getCenter().x, (int) cluster.getCenter().y),
 					getMousePos());
 			if (dist < min) {
 				closest = cluster;
@@ -90,9 +90,8 @@ public class Bot {
 		int[] pixel;
 		for (int x = 0; x < b.getWidth(); x++) {
 			for (int y = 0; y < b.getHeight(); y++) {
-				if (visited[x][y]) {
+				if (visited[x][y])
 					continue;
-				}
 				pixel = b.getRaster().getPixel(x, y, new int[3]);
 				if (ColorUtil.areColorsWithinTolerance(new Color(pixel[0], pixel[1], pixel[2]), colors)) {
 					LinkedList<Point> list = new LinkedList<Point>();
@@ -108,9 +107,8 @@ public class Bot {
 							visited[xOff][yOff] = true;
 						}
 					}
-					if (list.size() >= density) {
+					if (list.size() >= density)
 						clusters.add(new PointCluster(list));
-					}
 				}
 				visited[x][y] = true;
 			}
