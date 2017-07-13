@@ -7,7 +7,6 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import com.colorbot.bot.Bot;
-import com.colorbot.window.Point;
 
 /**
  * 

@@ -3,7 +3,7 @@ package com.colorbot.bot;
 import java.awt.MouseInfo;
 import java.util.Random;
 
-import com.colorbot.window.Point;
+import com.colorbot.util.Point;
 
 /**
  * RSBot's human mouse movement calculations

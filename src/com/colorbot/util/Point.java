@@ -1,4 +1,4 @@
-package com.colorbot.window;
+package com.colorbot.util;
 
 public class Point {
 

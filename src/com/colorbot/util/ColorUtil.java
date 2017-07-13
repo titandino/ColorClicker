@@ -4,9 +4,9 @@ import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import com.colorbot.bot.Bot;
-import com.colorbot.window.Point;
 
 /**
  * @Author Converted from Simba.
@@ -46,6 +46,21 @@ public class ColorUtil {
 	}
 
 	public static Rectangle createRectangleFromPoints(ArrayList<Point> points) {
+		Point minPoint = new Point(Bot.SCREEN_WIDTH, Bot.SCREEN_HEIGHT), maxPoint = new Point(0, 0);
+		for (Point p : points) {
+			if (p.x < minPoint.x)
+				minPoint.x = p.x;
+			if (p.x > maxPoint.x)
+				maxPoint.x = p.x;
+			if (p.y < minPoint.y)
+				minPoint.y = p.y;
+			if (p.y > maxPoint.y)
+				maxPoint.y = p.y;
+		}
+		return new Rectangle(minPoint.x, minPoint.y, (maxPoint.x - minPoint.x) + 1, (maxPoint.y - minPoint.y) + 1);
+	}
+	
+	public static Rectangle createRectangleFromPoints(LinkedList<Point> points) {
 		Point minPoint = new Point(Bot.SCREEN_WIDTH, Bot.SCREEN_HEIGHT), maxPoint = new Point(0, 0);
 		for (Point p : points) {
 			if (p.x < minPoint.x)

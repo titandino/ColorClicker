@@ -11,7 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -25,9 +25,9 @@ import com.colorbot.script.impl.RuneSpan;
 import com.colorbot.task.TaskExecutor;
 import com.colorbot.util.ColorTolerance;
 import com.colorbot.util.ColorUtil;
+import com.colorbot.util.Point;
 import com.colorbot.util.PointCluster;
 import com.colorbot.window.BotFrame;
-import com.colorbot.window.Point;
 
 public class Bot {
 
@@ -68,7 +68,9 @@ public class Bot {
 		PointCluster closest = null;
 		int min = 50000;
 		for (PointCluster cluster : clusters) {
-			int dist = ColorUtil.getDistanceBetween(new Point((int) cluster.getBoundingBox().getCenterX(), (int) cluster.getBoundingBox().getCenterY()), getMousePos());
+			int dist = ColorUtil.getDistanceBetween(
+					new Point((int) cluster.getBoundingBox().getCenterX(), (int) cluster.getBoundingBox().getCenterY()),
+					getMousePos());
 			if (dist < min) {
 				closest = cluster;
 				min = dist;
@@ -84,31 +86,33 @@ public class Bot {
 	public static ArrayList<PointCluster> findColorClusters(int density, int radius, ColorTolerance... colors) {
 		BufferedImage b = captureScreen();
 		ArrayList<PointCluster> clusters = new ArrayList<PointCluster>();
-		HashMap<Integer, Byte> visited = new HashMap<Integer, Byte>();
+		boolean[][] visited = new boolean[Bot.SCREEN_WIDTH][Bot.SCREEN_HEIGHT];
+		int[] pixel;
 		for (int x = 0; x < b.getWidth(); x++) {
 			for (int y = 0; y < b.getHeight(); y++) {
-				if (visited.get(getPackedPoint(x, y)) != null) {
-				continue;
+				if (visited[x][y]) {
+					continue;
 				}
-				if (ColorUtil.areColorsWithinTolerance(getColorAt(b, x, y), colors)) {
-					ArrayList<Point> list = new ArrayList<Point>();
+				pixel = b.getRaster().getPixel(x, y, new int[3]);
+				if (ColorUtil.areColorsWithinTolerance(new Color(pixel[0], pixel[1], pixel[2]), colors)) {
+					LinkedList<Point> list = new LinkedList<Point>();
 					for (int xOff = x - radius; xOff < x + radius; xOff++) {
 						for (int yOff = y - radius; yOff < y + radius; yOff++) {
 							if ((xOff < 0 || xOff > Bot.SCREEN_WIDTH) || (yOff < 0 || yOff > Bot.SCREEN_HEIGHT))
 								continue;
-							if (visited.get(getPackedPoint(xOff, yOff)) != null)
-							continue;
-							if (ColorUtil.areColorsWithinTolerance(getColorAt(b, xOff, yOff), colors))
+							if (visited[xOff][yOff])
+								continue;
+							pixel = b.getRaster().getPixel(xOff, yOff, new int[3]);
+							if (ColorUtil.areColorsWithinTolerance(new Color(pixel[0], pixel[1], pixel[2]), colors))
 								list.add(new Point(xOff, yOff));
-							visited.put(getPackedPoint(xOff, yOff), (byte) 0);
+							visited[xOff][yOff] = true;
 						}
 					}
 					if (list.size() >= density) {
 						clusters.add(new PointCluster(list));
 					}
-				} else {
-					visited.put(getPackedPoint(x, y), (byte) 0);
 				}
+				visited[x][y] = true;
 			}
 		}
 		return clusters;
@@ -161,7 +165,8 @@ public class Bot {
 	}
 
 	public static Color getColorOnMouse() {
-		return robot.getPixelColor((int) MouseInfo.getPointerInfo().getLocation().getX(), (int) MouseInfo.getPointerInfo().getLocation().getY());
+		return robot.getPixelColor((int) MouseInfo.getPointerInfo().getLocation().getX(),
+				(int) MouseInfo.getPointerInfo().getLocation().getY());
 	}
 
 	public static Point getPointWithColor(Color color, double distance) {
@@ -257,7 +262,8 @@ public class Bot {
 	}
 
 	private static double getDifference(Color c1, Color c2) {
-		return Math.sqrt(Math.pow(c2.getRed() - c1.getRed(), 2) + Math.pow(c2.getGreen() - c1.getGreen(), 2) + Math.pow(c2.getBlue() - c1.getBlue(), 2));
+		return Math.sqrt(Math.pow(c2.getRed() - c1.getRed(), 2) + Math.pow(c2.getGreen() - c1.getGreen(), 2)
+				+ Math.pow(c2.getBlue() - c1.getBlue(), 2));
 	}
 
 	public static double getDifference(int rgb1, int rgb2) {
@@ -288,7 +294,8 @@ public class Bot {
 			Mouse.moveMouse(p.x, p.y, random);
 	}
 
-	public static void moveMouse(Color color, Color color2, int radius, double colorVariation, int dontMoveDist, int random) {
+	public static void moveMouse(Color color, Color color2, int radius, double colorVariation, int dontMoveDist,
+			int random) {
 		Point moveTo = getPointWithColorCombo(color, color2, radius, colorVariation);
 		if (moveTo != null) {
 			if (ColorUtil.getDistanceBetween(Mouse.getMouseLocation(), moveTo) > dontMoveDist)

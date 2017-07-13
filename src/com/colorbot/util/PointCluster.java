@@ -3,16 +3,14 @@ package com.colorbot.util;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import java.util.ArrayList;
-
-import com.colorbot.window.Point;
+import java.util.LinkedList;
 
 public class PointCluster {
 
-	private ArrayList<Point> points;
+	private LinkedList<Point> points;
 	private Rectangle boundingBox;
 
-	public PointCluster(ArrayList<Point> points) {
+	public PointCluster(LinkedList<Point> points) {
 		this.points = points;
 		this.boundingBox = ColorUtil.createRectangleFromPoints(points);
 	}
@@ -21,7 +19,7 @@ public class PointCluster {
 		return boundingBox;
 	}
 
-	public ArrayList<Point> getPoints() {
+	public LinkedList<Point> getPoints() {
 		return points;
 	}
 

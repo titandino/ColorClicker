@@ -4,7 +4,7 @@ import java.awt.Color;
 
 import com.colorbot.bot.Bot;
 import com.colorbot.script.Script;
-import com.colorbot.window.Point;
+import com.colorbot.util.Point;
 
 public class Menaphites extends Script {
 

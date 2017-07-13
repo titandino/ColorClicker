@@ -7,6 +7,7 @@ import com.colorbot.bot.Mouse;
 import com.colorbot.script.Script;
 import com.colorbot.util.ColorTolerance;
 import com.colorbot.util.PointCluster;
+import com.colorbot.window.BotFrame;
 import com.colorbot.window.Overlay;
 
 public class RuneSpan extends Script {
@@ -18,6 +19,7 @@ public class RuneSpan extends Script {
 		try {
 			Bot.MOUSE_SPEED = 2;
 			PointCluster closest = Bot.findClosestColorCluster(20, 50, siphon.getCTs());
+			BotFrame.log("Closest cluster: " + closest);
 			if (closest != null) {
 				closest.render(Overlay.ovl.getGraphics());
 				Overlay.ovl.repaint();
@@ -33,7 +35,7 @@ public class RuneSpan extends Script {
 	}
 
 	public enum Siphon {
-		WATER_ESSLING(new ColorTolerance(new Color(192, 106, 94), 10), new ColorTolerance(new Color(110, 192, 224), new Color(10, 10, 20)));
+		WATER_ESSLING(new ColorTolerance(new Color(192, 105, 92), 10), new ColorTolerance(new Color(108, 196, 226), new Color(10, 10, 20)));
 
 		private ColorTolerance[] cts;
 
