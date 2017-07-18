@@ -170,6 +170,10 @@ public class Mouse {
 	}
 
 	public static void moveMouse(final int speed, final int x1, final int y1, final int x2, final int y2, int randX, int randY) {
+		if (Bot.MOUSE_SPEED == 0) {
+			Bot.robot.mouseMove(x2 + Bot.random(randX) - Bot.random(randX/2), y2 + Bot.random(randY) - Bot.random(randY/2));
+			return;
+		}
 		if ((x2 == -1) && (y2 == -1)) {
 			return;
 		}
