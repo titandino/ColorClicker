@@ -1,8 +1,7 @@
 package com.colorbot.bot;
 
 import java.awt.MouseInfo;
-import java.util.Random;
-
+import java.security.SecureRandom;
 import com.colorbot.util.Point;
 
 /**
@@ -17,7 +16,7 @@ public class Mouse {
 	public static final int msPerBit = 35;
 	public static final int reactionTime = 2;
 
-	private final static Random random = new java.util.Random();
+	private final static SecureRandom random = new SecureRandom();
 
 	public static Point getMouseLocation() {
 		return new Point((int) MouseInfo.getPointerInfo().getLocation().getX(), (int) MouseInfo.getPointerInfo().getLocation().getY());

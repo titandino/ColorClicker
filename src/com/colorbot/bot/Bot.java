@@ -9,11 +9,11 @@ import java.awt.event.InputEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.LinkedList;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
@@ -334,7 +334,7 @@ public class Bot {
 		currentScript = null;
 	}
 
-	public static Random random = new Random();
+	public static SecureRandom random = new SecureRandom();
 
 	public static final int random(int maxValue) {
 		if (maxValue <= 0)
